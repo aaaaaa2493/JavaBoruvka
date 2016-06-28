@@ -1,4 +1,5 @@
 package src;
+import java.util.ArrayList;
 
 public interface GraphInterface {
 	void addVertex(int x, int y, int id);
@@ -9,4 +10,6 @@ public interface GraphInterface {
 	int getEdgeWeight(Edge e);
 	Edge getMinIncidentEdge(Graph graph);
 	void clear();
+	ArrayList<Vertex> getVertices();
+	ArrayList<Edge> getEdges();
 }

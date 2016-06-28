@@ -176,7 +176,7 @@ public class Graph implements GraphInterface {
 	}
 	
 	/**
-	 * Метод, возвращающий true, если граф связный, иначе false
+	 * Метод, возвращающий вес ребра <b>e</b>
 	 */
 	public int getEdgeWeight(Edge e){
 		int diffX = e.getU().getX() - e.getV().getX();
@@ -220,6 +220,20 @@ public class Graph implements GraphInterface {
 	public void clear(){
 		vertices.clear();
 		edges.clear();
+	}
+	
+	/**
+	 * Метод, возвращающий список вершин графа
+	 */
+	public ArrayList<Vertex> getVertices(){
+		return vertices;
+	}
+	
+	/**
+	 * Метод, возвращающий список рёбер графа
+	 */
+	public ArrayList<Edge> getEdges(){
+		return edges;
 	}
 
 }
