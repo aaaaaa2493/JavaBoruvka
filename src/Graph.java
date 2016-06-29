@@ -128,11 +128,11 @@ public class Graph implements GraphInterface {
 	 * Метод реализующий удаление вершины <b>v</b> из графа
 	 */
 	public void removeVertex(Vertex v){
-		for(int i = 0, size = vertices.size(); i < size; i++){
+		for(int i = 0; i < vertices.size(); i++){
 			if(vertices.get(i) == v){
-				for(int j = 0, size1 = edges.size(); j < size1; j++){
+				for(int j = 0; j < edges.size(); j++){
 					if(edges.get(j).getU() == v || edges.get(j).getV() == v){
-						removeEdge(edges.get(i));
+						removeEdge(edges.get(j));
 						j--;
 					}
 				}

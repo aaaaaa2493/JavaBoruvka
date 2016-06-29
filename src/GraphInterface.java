@@ -6,7 +6,7 @@ public interface GraphInterface {
 	void addEdge(Vertex u, Vertex v);
 	void removeEdge(Edge e);
 	void removeVertex(Vertex v);
-	boolean isConnected(); // Проверяет граф на связность
+	boolean isConnected();
 	int getEdgeWeight(Edge e);
 	Edge getMinIncidentEdge(Graph graph);
 	void clear();
