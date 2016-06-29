@@ -33,7 +33,7 @@ public class Main extends QMainWindow {
 	/** Радиус вершины графа */
 	public static final int VERTEX_RADIUS = 13;
 	
-	
+	ArrayList<Graph> forest = new ArrayList<Graph>();
 	/** 
 	 * <p>Конструктор класса <code>Main</code></p>
 	 * <p>Создает и устанавливает пользовательский интерфейс</p>
@@ -134,11 +134,47 @@ public class Main extends QMainWindow {
 	/**
 	 * Начало работы алгоритма
 	 * (инициализация переменных, корректировка пользовательского интерфейса)
+	 * @throws NoSuchFieldException 
 	 */
 	public void begin() {
-		/** 
-		 * TODO: начало работы алгоритма
-		 */
+		if (graph.getVertices().size() == 1) return;
+	    if (graph.getVertices().size() == 0)
+	    {
+	        QMessageBox m = new QMessageBox();
+	        m.setWindowTitle("Ошибка");
+	        m.setText("Граф должен быть непустым     ");
+	        m.show();
+	        return;
+	    }
+	    if (graph.isConnected() == false)
+	    {
+	        QMessageBox m = new QMessageBox();
+	        m.setWindowTitle("Ошибка");
+	        m.setText("Граф должен быть связным     ");
+	        m.show();
+	        return;
+	    }
+
+
+	    //создание тривиальных компонент связностей
+	    forest.clear();
+	    for (int i = 0; i < graph.getVertices().size(); i++)
+	    {
+	        forest.add(new Graph());
+	        try {
+				forest.get(forest.size()-1).addVertex(graph.getVertex(i).getX(), graph.getVertex(i).getY(), 0);
+			} catch (NoSuchFieldException e1) {
+				return;
+			}
+	        try {
+				forest.get(forest.size()-1).getVertex(0).setID(graph.getVertex(i).getId());
+			} catch (NoSuchFieldException e) {
+				return;
+			}
+	    }
+	    ui.stepButton.setEnabled(false);
+	    ui.clearButton.setDisabled(true);
+	    repaint();
 	}
 	
 	/**
