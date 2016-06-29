@@ -33,7 +33,7 @@ public class Main extends QMainWindow {
 	/** Радиус вершины графа */
 	public static final int VERTEX_RADIUS = 13;
 	
-	ArrayList<Graph> forest = new ArrayList<Graph>();
+	private ArrayList<Graph> forest = new ArrayList<Graph>();
 	/** 
 	 * <p>Конструктор класса <code>Main</code></p>
 	 * <p>Создает и устанавливает пользовательский интерфейс</p>
@@ -136,18 +136,16 @@ public class Main extends QMainWindow {
 	 * (инициализация переменных, корректировка пользовательского интерфейса)
 	 * @throws NoSuchFieldException 
 	 */
-	public void begin() {
+	public void begin() throws NoSuchFieldException {
 		if (graph.getVertices().size() == 1) return;
-	    if (graph.getVertices().size() == 0)
-	    {
+	    if (graph.getVertices().size() == 0) {
 	        QMessageBox m = new QMessageBox();
 	        m.setWindowTitle("Ошибка");
 	        m.setText("Граф должен быть непустым     ");
 	        m.show();
 	        return;
 	    }
-	    if (graph.isConnected() == false)
-	    {
+	    if (graph.isConnected() == false) {
 	        QMessageBox m = new QMessageBox();
 	        m.setWindowTitle("Ошибка");
 	        m.setText("Граф должен быть связным     ");
@@ -158,41 +156,84 @@ public class Main extends QMainWindow {
 
 	    //создание тривиальных компонент связностей
 	    forest.clear();
-	    for (int i = 0; i < graph.getVertices().size(); i++)
-	    {
+	    for (int i = 0; i < graph.getVertices().size(); i++) {
 	        forest.add(new Graph());
-	        try {
-				forest.get(forest.size()-1).addVertex(graph.getVertex(i).getX(), graph.getVertex(i).getY(), 0);
-			} catch (NoSuchFieldException e1) {
-				return;
-			}
-	        try {
-				forest.get(forest.size()-1).getVertex(0).setID(graph.getVertex(i).getId());
-			} catch (NoSuchFieldException e) {
-				return;
-			}
+			forest.get(forest.size()-1).addVertex(graph.getVertex(i).getX(), graph.getVertex(i).getY(), 0);
+			forest.get(forest.size()-1).getVertex(0).setID(graph.getVertex(i).getId());
 	    }
-	    ui.stepButton.setEnabled(false);
+	    ui.stepButton.setEnabled(true);
 	    ui.clearButton.setDisabled(true);
 	    repaint();
 	}
 	
 	/**
 	 * Осуществление шага работы алгоритма
+	 * @throws NoSuchFieldException 
 	 */
-	public void step() {
-		/** 
-		 * TODO: шаг алгоритма
-		 */
+	public void step() throws NoSuchFieldException {
+		ArrayList<Edge> edges = new ArrayList<Edge>();
+
+	    //нахождение ребер для добавления
+	    for (int i = 0; i < forest.size(); i++)
+	    {
+	        Edge edge = graph.getMinIncidentEdge(forest.get(i));
+	        if (edges.contains(edge) == false) {
+	        	edges.add(edge);
+	        }
+	    }
+
+	    //склейка компонент связности
+	    for (int i = 0; i < edges.size(); i++)
+	    {
+	        //поиск компонент связности, которым инцидентна текущая вершина
+	        int uc = 0 ,vc = 0;
+	        for (int j = 0; j < forest.size(); j++) {
+	            for (int k = 0; k < forest.get(j).getVertices().size(); k++) {
+	                if (forest.get(j).getVertex(k).getId() == edges.get(i).getU().getId()) {
+	                    uc = j;
+	                    break;
+	                }
+	            }
+	        }
+	        for (int j = 0; j < forest.size(); j++) {
+	            for (int k = 0; k < forest.get(j).getVertices().size(); k++) {
+	                if (forest.get(j).getVertex(k).getId() == edges.get(i).getV().getId()) {
+	                    vc = j;
+	                    break;
+	                }
+	            }
+	        }
+	        //добавление вершин и ребер из компоненты v в компоненту u
+	        for (int j = 0; j < forest.get(vc).getVertices().size(); j++) {
+	            forest.get(uc).getVertices().add(forest.get(vc).getVertex(j));
+	        }
+	        for (int j = 0; j < forest.get(vc).getEdges().size(); j++) {
+	            forest.get(uc).getEdges().add(forest.get(vc).getEdge(j));
+	        }
+	        //добавление в компоненту u текущего ребра
+	        forest.get(uc).getEdges().add(edges.get(i));
+
+	        //условие завершения алгоритма
+	        if (forest.get(uc).getVertices().size() == graph.getVertices().size()) {
+	            //processing = false;
+	            ui.stepButton.setDisabled(true);
+	            ui.clearButton.setEnabled(true);
+
+	        }
+
+	        //удаление компоненты v
+	        forest.remove(vc);
+	        repaint();
+	    }
 	}
 	
 	/**
 	 * Метод для очистки графа
 	 */
 	public void clear() {
-		/** 
-		 * TODO: очитска графа
-		 */
+		selected.clear();
+	    graph.clear();
+	    repaint();
 	}
 	
 	public static void main(String[] args) {
