@@ -38,9 +38,11 @@ public class MainWindowUI implements com.trolltech.qt.QUiForm<QMainWindow>
         centralwidget.setObjectName("centralwidget");
         stepButton = new QPushButton(centralwidget);
         stepButton.setObjectName("stepButton");
+        stepButton.setDisabled(true);
         stepButton.setGeometry(new QRect(10, 40, 141, 23));
         clearButton = new QPushButton(centralwidget);
         clearButton.setObjectName("clearButton");
+        clearButton.setDisabled(true);
         clearButton.setGeometry(new QRect(10, 70, 141, 23));
         beginButton = new QPushButton(centralwidget);
         beginButton.setObjectName("beginButton");
