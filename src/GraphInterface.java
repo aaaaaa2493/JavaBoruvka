@@ -12,4 +12,6 @@ public interface GraphInterface {
 	void clear();
 	ArrayList<Vertex> getVertices();
 	ArrayList<Edge> getEdges();
+	Vertex getVertex(int i) throws NoSuchFieldException;
+	Edge getEdge(int i) throws NoSuchFieldException;
 }

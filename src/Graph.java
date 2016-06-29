@@ -1,7 +1,6 @@
 package src;
 import java.util.ArrayList;
 
-
 /**
  * Класс, реализующий вершину графа с координатами <b>x</b> и <b>y</b>
  */
@@ -235,5 +234,27 @@ public class Graph implements GraphInterface {
 	public ArrayList<Edge> getEdges(){
 		return edges;
 	}
-
+	
+	/**
+	 * Метод, возвращающий true если граф пуст, иначе false
+	 */
+	public boolean isEmpty(){
+		return vertices.isEmpty();
+	}
+	
+	/**
+	 * Метод, возвращающий вершину по индексу <b>i</b>
+	 */
+	public Vertex getVertex(int i) throws NoSuchFieldException {
+		if(i >= vertices.size() || i < 0) throw new NoSuchFieldException();
+		return vertices.get(i);
+	}
+	
+	/**
+	 * Метод, возвращающий ребро по индексу <b>i</b>
+	 */
+	public Edge getEdge(int i) throws NoSuchFieldException {
+		if(i >= edges.size() || i < 0) throw new NoSuchFieldException();
+		return edges.get(i);
+	}
 }
